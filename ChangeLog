@@ -1,3 +1,10 @@
+2013-06-27 - 0.2.0
+* Major update for gdnsd 1.8.x.
+* Manage the config file from the main class instead of using file.
+* Rename file definition to zone.
+* Fix included trivial config template, and add example usage in README.
+* Purge /etc/gdnsd/zones/ by default, no need to "ensure => absent" old files.
+
 2013-05-24 - 0.1.1
 * Add source_base for multiple configuration files in the same source dir.
 

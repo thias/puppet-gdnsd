@@ -1,30 +1,30 @@
-# Define: gdnsd::file
+# Define: gdnsd::zone
 #
-# Install gdnsd configuration files. Typically the main 'config' file, then
-# any number of DNS zone files.
+# Install gdnsd zone files.
 #
 # Example :
-#   gdnsd::file { 'config':
-#     content => template('modules/mymodule/gdnsd/config.erb'),
-#   }
-#   gdnsd::file { 'example.com':
+#   gdnsd::zone { 'example.com':
 #     source => 'puppet:///modules/mymodule/dns/example.com',
 #   }
+#   gdnsd::zone { [ 'example.net', 'example.org' ]:
+#     source_base => 'puppet:///modules/mymodule/dns/',
+#   }
 #
-define gdnsd::file (
+define gdnsd::zone (
   $ensure      = undef,
   $source      = undef,
   $source_base = undef,
-  $content     = undef
+  $content     = undef,
+  $mode        = '0640'
 ) {
 
   if $source      { $zone_source = $source }
   if $source_base { $zone_source = "${source_base}${title}" }
 
-  file { "/etc/gdnsd/${title}":
+  file { "/etc/gdnsd/zones/${title}":
     owner   => 'root',
     group   => 'root',
-    mode    => '0640',
+    mode    => $mode,
     source  => $zone_source,
     content => $content,
     notify  => Service['gdnsd'],

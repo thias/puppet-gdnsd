@@ -5,28 +5,31 @@
 Install, enable and configure the gdnsd DNS server.
 
 * `gdnsd` : Main class to install, enable and configure the server.
-* `gdnsd::file` : Definition to manage configuration and zone files.
+* `gdnsd::zone` : Definition to manage zone files.
 
 ## Examples
 
 Install and enable the server (for the ip_nonlocal_bind to work, you will need
-the sysctl module) :
+the sysctl module), using the included template for the main configuration :
 
-    class { 'gdnsd': ip_nonlocal_bind => true }
-
-Configure the server using a template, and install a single zone file :
-
-    gdnsd::file { 'config':
-      content => template('mymodule/gdnsd/config.erb'),
+    $options = {
+      'listen' => '[ 127.0.0.1 ]',
     }
-    gdnsd::file { 'example.com':
+    class { 'gdnsd':
+      config_content   => template('gdnsd/config.erb'),
+      ip_nonlocal_bind => true,
+    }
+
+Install a single zone file :
+
+    gdnsd::zone { 'example.com':
       source => 'puppet:///modules/mymodule/dns/example.com',
     }
 
 For multiple source-based files, use the `$source_base` parameter to be able
 to use an array of zone names :
 
-    gdnsd::file { [ 'example.com', 'example.net', 'example.org' ]:
+    gdnsd::zone { [ 'example.com', 'example.net', 'example.org' ]:
       source_base => 'puppet:///modules/mymodule/dns/',
     }
 

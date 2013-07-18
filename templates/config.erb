@@ -1,11 +1,13 @@
 # For more information on configuration, see "man gdnsd.config"
 options => {
-<% options.sort_by {|key,value| key}.each do |key,value| -%>
+<% @options.sort_by {|key,value| key}.each do |key,value| -%>
   <%= key %> => <%= value %>
 <% end -%>
 }
+<% if @zones -%>
 zones => {
-<% zones.sort_by {|key,value| key}.each do |key,value| -%>
+<% @zones.sort_by {|key,value| key}.each do |key,value| -%>
   <%= key %> => { <%= value %> }
 <% end -%>
 }
+<% end -%>
